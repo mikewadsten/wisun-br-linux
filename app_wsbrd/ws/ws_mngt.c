@@ -628,7 +628,7 @@ void ws_mngt_pa_send(struct trickle *tkl, struct timer_group *group)
             .fan_tps_version  = ws_info->pan_information.version,
         },
         .wp_ies.netname = true,
-        .wp_ies.pom     = schedule->phy_op_modes[0] && schedule->phy_op_modes[1],
+        .wp_ies.pom     = schedule->phy_op_modes[0],
         .wp_ies.jm      = memzcmp(ws_info->pan_information.jm.metrics, sizeof(ws_info->pan_information.jm.metrics)),
     };
 
