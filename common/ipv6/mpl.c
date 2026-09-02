@@ -336,7 +336,7 @@ static uint8_t mpl_seq_load(void)
 
     while (storage_parse_line(info) != EOF) {
         if (!fnmatch("seq", info->key, 0))
-            seq = strtoul(info->value, NULL, 0);
+            seq = strtoul(info->value, NULL, 0) + 1;
         else
             WARN("%s:%d: invalid key: '%s'", info->filename, info->linenr, info->line);
     }

@@ -1,3 +1,6 @@
+  - Increment MPL Sequence after reboot: previously the value of the last
+    packet was reused, causing the first packet to be dropped as a duplicate.
+
 v2.10.2
 -------
   - `wsbrd`: Fix invalid PAN ID insertion in LTS frames.
