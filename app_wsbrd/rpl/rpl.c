@@ -97,16 +97,17 @@ struct rpl_transit *rpl_transit_preferred(struct rpl_root *root, struct rpl_targ
 
 static void rpl_transit_update_timer(struct rpl_root *root, struct rpl_target *target)
 {
-    uint64_t expire_s = UINT64_MAX;
+    int64_t expire_s = INT64_MAX;
 
     for (uint8_t i = 0; i < root->pcs + 1; i++) {
         if (!memzcmp(target->transits + i, sizeof(struct rpl_transit)))
             continue;
-        if (expire_s > target->path_seq_tstamp_s + target->transits[i].path_lifetime_s)
-            expire_s = target->path_seq_tstamp_s + target->transits[i].path_lifetime_s;
+        // NOTE: The expiration date may be negative after a reboot
+        if (expire_s > target->path_seq_tstamp_s + (time_t)target->transits[i].path_lifetime_s)
+            expire_s = target->path_seq_tstamp_s + (time_t)target->transits[i].path_lifetime_s;
     }
     timer_start_abs(&root->timer_group, &target->timer,
-                    MAX(expire_s * 1000, time_now_ms(CLOCK_MONOTONIC)));
+                    MAX(expire_s * 1000, (int64_t)time_now_ms(CLOCK_MONOTONIC)));
 }
 
 static void rpl_transit_expire(struct timer_group *group, struct timer_entry *timer)
