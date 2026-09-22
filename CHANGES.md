@@ -1,6 +1,8 @@
   - Increment MPL Sequence after reboot: previously the value of the last
     packet was reused, causing the first packet to be dropped as a duplicate.
   - `wsbrd`: Fix not inserting POM-IE with single PhyModeId in PA frames.
+  - `wsrd`: Fix DAO No Path transmission during disconnection procedure: it
+    would previously only go out if the border router was a RPL neighbor.
 
 v2.10.2
 -------

@@ -53,6 +53,7 @@ struct ipv6_ctx {
 
 void ipv6_recvfrom_mac(struct ipv6_ctx *ipv6, struct pktbuf *pktbuf, const struct eui64 *src_eui64);
 void ipv6_recvfrom_tun(struct ipv6_ctx *ipv6);
+void ipv6_flush_tun(struct ipv6_ctx *ipv6, uint64_t timeout_ms);
 
 void ipv6_push_hdr(struct pktbuf *pktbuf,
                    uint8_t ipproto, uint8_t hlim,

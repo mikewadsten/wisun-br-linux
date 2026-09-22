@@ -18,6 +18,7 @@
 #include <math.h>
 #include <string.h>
 #include <unistd.h>
+#include <poll.h>
 
 #include "common/ipv6/ipv6_addr.h"
 #include "common/bits.h"
@@ -528,6 +529,25 @@ void ipv6_recvfrom_tun(struct ipv6_ctx *ipv6)
     ipv6_sendto_mac(ipv6, &pktbuf, &rpi);
 err:
     pktbuf_free(&pktbuf);
+}
+
+void ipv6_flush_tun(struct ipv6_ctx *ipv6, uint64_t timeout_ms)
+{
+    struct pollfd pfd = {
+        .fd = ipv6->tun.fd,
+        .events = POLLIN,
+    };
+    uint64_t expire_ms;
+    int ret;
+
+    expire_ms = time_now_ms(CLOCK_MONOTONIC) + timeout_ms;
+    while (time_now_ms(CLOCK_MONOTONIC) < expire_ms) {
+        ret = poll(&pfd, 1, 0);
+        FATAL_ON(ret < 0, 2, "poll: %m");
+        if (!ret)
+            break;
+        ipv6_recvfrom_tun(ipv6);
+    }
 }
 
 void ipv6_push_hdr(struct pktbuf *pktbuf,

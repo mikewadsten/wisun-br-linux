@@ -304,6 +304,8 @@ static void join_state_disconnecting_enter(struct wsrd *wsrd)
             rpl_send_dio(&wsrd->ipv6, parent, &ipv6_addr_all_rpl_nodes_link);
         // Restore the path control to ensure unregistration from rpl_stop()
         parent->rpl->path_ctl = RPL_PATH_CTL_PREFERRED;
+        // NOTE: DAO cannot be sent once RPL is stopped, process immediately.
+        ipv6_flush_tun(&wsrd->ipv6, 100); // Arbitrary timeout
     }
     if (wsrd->last_event != WSRD_EVENT_RPL_PREF_LOST)
         timer_stop(NULL, &wsrd->pan_timeout_timer);
