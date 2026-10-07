@@ -30,11 +30,14 @@ Features:
   - Process NS(ARO) from children nodes to setup downward routing.
   - Process RPL Packet Information (RPI) hop-by-hop option for upward routing.
   - Process RPL Source Routing Header (SRH) for downward routing.
+  - Select and register a secondary RPL parent.
+  - Transmit, receive and forward multicast packet using MPL.
+  - Reassemble IPv6 packets fragmented at the 6LoWPAN layer.
   - Store important data on disk and restore on restart to accelerate
     reconnection: security keys, frame counters, PAN ID...
   - Perform DIO poisoning to inform children when `wsrd` is no longer able to
     parent.
-  - Send NS(ARO) with lifetime 0 to the parent before leaving the network.
+  - Deregister from parent(s) using NS(ARO) when they are not used anymore.
   - Send DAO No-Path to the border router to inform that `wsrd` is purposely
     leaving the network.
   - Respond to NA(EARO) for Registration Refresh Request to accelerate parent
@@ -42,13 +45,13 @@ Features:
 
 Limitations:
 
-  - No secondary parent selection and registration.
-  - No RPL hop-by-hop option inserted in IPv6 packet: no IPv6-in-IPv6 tunnel is
-    created and no loop detection is possible for local repair.
-  - No filtering of RPL candidates based on the RSL.
-  - No handling of RPL DODAG Version Number and DTSN normally used to
-    accelerate global network recovery.
-  - No MPL support for multicast forwarding.
   - No LFN parenting support.
-  - No 6LoWPAN fragmentation/reassembly support.
   - No mode switch transmission and advertisement support.
+  - No 6LoWPAN fragment transmition support.
+  - No EDFE transmission support.
+  - Silicon Labs vendor features available on the embedded Wi-SUN stack but
+    not on `wsrd`:
+    * Automatic scaling of network connection parameters
+    * PAN defect, preferred PAN
+    * Last gasp, first breath
+    * Direct connect server
